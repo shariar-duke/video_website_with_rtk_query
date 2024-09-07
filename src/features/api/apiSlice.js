@@ -10,10 +10,22 @@ export const apiSlice = createApi({
       query: () => "/videos",
     }),
     getVideo: builder.query({
-        query: (videoId) => `/videos/${videoId}`,
-      }),
+      query: (videoId) => `/videos/${videoId}`,
+    }),
+    getRelatedVideos: builder.query({
+      query: ({ id, title }) => {
+        // Split the title into tags
+        const tags = title.split(" ");
+
+        // Construct the query string with title_like for each tag and exclude the current video by id
+        const likes = tags.map((tag) => `title_like=${tag}`);
+        const queryString = `/videos?${likes.join("&")}&id_ne=${id}&_limit=4`;
+
+        return queryString;
+      },
+    }),
   }),
 });
 
-// Export the hook generated for the getVideos query
-export const { useGetVideosQuery , useGetVideoQuery } = apiSlice;
+// Export the hooks for the queries
+export const { useGetVideosQuery, useGetVideoQuery, useGetRelatedVideosQuery } = apiSlice;
