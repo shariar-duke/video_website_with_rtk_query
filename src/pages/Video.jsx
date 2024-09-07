@@ -3,6 +3,7 @@ import Player from "../components/description/Player";
 import VideoDescription from "../components/description/VideoDescription";
 // import RelatedVideoList from "../components/list/RelatedVideoList";
 import Loading from "../components/ui/Loading";
+import RelatedVideoLoader from "../components/ui/RelatedVideoLoader";
 import { useGetVideoQuery } from "../features/api/apiSlice";
 
 export default function Video() {
@@ -39,7 +40,14 @@ export default function Video() {
           <VideoDescription video={video} />
         </div>
         {/* <RelatedVideoList currentVideoId ={id} tags= {tags} /> */}
-        <p>Related Vidoe section </p>
+
+        {
+          video?.id ? <p>Related Videos</p> : isLoading ? <>
+           <RelatedVideoLoader/>
+           <RelatedVideoLoader/>
+          </> :<p className="text-red-500 font-bold">No Video Found</p>
+        }
+      
       </div>
     );
   }
