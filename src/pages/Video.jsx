@@ -1,20 +1,24 @@
 import { useParams } from "react-router-dom";
 import Player from "../components/description/Player";
 import VideoDescription from "../components/description/VideoDescription";
-// import RelatedVideoList from "../components/list/RelatedVideoList";
+import RelatedVideoList from "../components/list/RelatedVideoList";
 import Loading from "../components/ui/Loading";
 import RelatedVideoLoader from "../components/ui/RelatedVideoLoader";
 import { useGetVideoQuery } from "../features/api/apiSlice";
 
 export default function Video() {
   const { videoId } = useParams();
-  const { data:video, isError, isLoading } = useGetVideoQuery(videoId ? videoId : "");
+  const {
+    data: video,
+    isError,
+    isLoading,
+  } = useGetVideoQuery(videoId ? videoId : "");
 
-  console.log("The video is", video)
+  console.log("The video is", video);
 
   // video er modhe onk property ase ogula distructure kore ber kore ante hbe
 
-  const { link, title } = video || {};
+  const { link, title, id } = video || {};
 
   let content = null;
 
@@ -39,15 +43,18 @@ export default function Video() {
 
           <VideoDescription video={video} />
         </div>
-        {/* <RelatedVideoList currentVideoId ={id} tags= {tags} /> */}
+        <RelatedVideoList id={id} title={title} />
 
-        {
-          video?.id ? <p>Related Videos</p> : isLoading ? <>
-           <RelatedVideoLoader/>
-           <RelatedVideoLoader/>
-          </> :<p className="text-red-500 font-bold">No Video Found</p>
-        }
-      
+        {video?.id ? (
+          <p>Related Videos</p>
+        ) : isLoading ? (
+          <>
+            <RelatedVideoLoader />
+            <RelatedVideoLoader />
+          </>
+        ) : (
+          <p className="text-red-500 font-bold">No Video Found</p>
+        )}
       </div>
     );
   }
