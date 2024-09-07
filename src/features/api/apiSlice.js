@@ -16,4 +16,4 @@ export const apiSlice = createApi({
 });
 
 // Export the hook generated for the getVideos query
-export const { useGetVideosQuery } = apiSlice;
+export const { useGetVideosQuery , useGetVideoQuery } = apiSlice;
