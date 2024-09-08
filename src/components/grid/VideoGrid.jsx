@@ -1,9 +1,16 @@
+import { useEffect } from "react";
 import { useGetVideosQuery } from "../../features/api/apiSlice";
 import Loading from "../ui/Loading";
 import VideoGridItem from "./VideoGridItem";
 export default function VideoGrid() {
-  const { data: videos, isLoading, isError } = useGetVideosQuery();
+  const { data: videos, isLoading, isError , refetch } = useGetVideosQuery(undefined, {
+    refetchOnMountOrArgChange:true
+  });
 
+  useEffect(()=> 
+  {
+    refetch()
+  })
   // deciding what to render error message ta dekhabo naki videos gula dekhabo. videos thakle videos gula dekhabo. r jode videos na ase tahle error message gula dekhabo
 
   let content = null;
