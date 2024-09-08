@@ -1,9 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useEditVideoMutation } from '../../features/api/apiSlice';
 
 export default function EditVideoForm({ video }) {
-  console.log("The video description is", video);
-
-  // State management for form fields
   const [form, setForm] = useState({
     title: video?.title ?? '',
     author: video?.author ?? '',
@@ -11,25 +10,45 @@ export default function EditVideoForm({ video }) {
     link: video?.link ?? '',
     thumbnail: video?.thumbnail ?? '',
     date: video?.date ?? '',
-    duration: video?.duration ?? "", // Initialize as 0 or a valid number
-    views: video?.views ?? "" // Initialize as 0
+    duration: video?.duration ?? '',
+    views: video?.views ?? 0,
   });
 
-  // Handle change for input fields
+  const [editVideo, { isLoading, isSuccess, isError }] = useEditVideoMutation();
+  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate(); // To navigate to the home page
+
+  // Update the form when the input fields change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prevForm) => ({ ...prevForm, [name]: value }));
   };
 
-  // Handle form submission (e.g., to update the video)
-  const handleSubmit = (e) => {
+  // Handle form submission
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Logic to handle the update, e.g., by calling a mutation
+    try {
+      // Call the mutation to edit the video
+      await editVideo({ id: video.id, data: form }).unwrap();
+    } catch (err) {
+      setErrorMessage('Failed to update the video. Please try again.');
+    }
   };
+
+  // If the mutation is successful, redirect to the home page
+  useEffect(() => {
+    if (isSuccess) {
+      navigate('/');
+    }
+  }, [isSuccess, navigate]);
 
   return (
     <form onSubmit={handleSubmit}>
-      {/* Title Field */}
+      {/* Display error message if the update fails */}
+      {isError && <p className="text-red-500">Failed to update the video.</p>}
+      {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+
+      {/* Form fields */}
       <div className="mb-4">
         <label className="block text-gray-700 font-semibold mb-2" htmlFor="title">
           Title
@@ -45,7 +64,6 @@ export default function EditVideoForm({ video }) {
         />
       </div>
 
-      {/* Author Field */}
       <div className="mb-4">
         <label className="block text-gray-700 font-semibold mb-2" htmlFor="author">
           Author
@@ -109,9 +127,8 @@ export default function EditVideoForm({ video }) {
         />
       </div>
 
-      {/* Date, Duration, Views Fields (on the same line) */}
+      {/* Date, Duration, Views Fields */}
       <div className="grid grid-cols-3 gap-4 mb-4">
-        {/* Date Field */}
         <div>
           <label className="block text-gray-700 font-semibold mb-2" htmlFor="date">
             Date
@@ -126,7 +143,6 @@ export default function EditVideoForm({ video }) {
           />
         </div>
 
-        {/* Duration Field */}
         <div>
           <label className="block text-gray-700 font-semibold mb-2" htmlFor="duration">
             Duration (mins)
@@ -138,23 +154,22 @@ export default function EditVideoForm({ video }) {
             value={form.duration}
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Duration in minutes"
+            placeholder="Enter duration"
           />
         </div>
 
-        {/* Views Field */}
         <div>
           <label className="block text-gray-700 font-semibold mb-2" htmlFor="views">
             Views
           </label>
           <input
-            type="text"
+            type="number"
             id="views"
             name="views"
             value={form.views}
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Number of views"
+            placeholder="Enter number of views"
           />
         </div>
       </div>
@@ -164,7 +179,7 @@ export default function EditVideoForm({ video }) {
         type="submit"
         className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600"
       >
-        Save Changes
+        {isLoading ? "Saving..." : "Save Changes"}
       </button>
     </form>
   );
