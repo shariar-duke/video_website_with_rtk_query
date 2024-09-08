@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import EditDelete from "./EditDelete";
 export default function VideoDescription({ video }) {
-  const { title, date, description } = video;
+  const { title, date, description , id} = video;
   return (
     <div>
       <h1 className="text-lg font-semibold tracking-tight text-slate-800">
@@ -12,7 +12,7 @@ export default function VideoDescription({ video }) {
           {date}
         </h2>
 
-        <EditDelete />
+        <EditDelete  id={id} />
       </div>
 
       <div className="mt-4 text-sm text-[#334155] dark:text-slate-400">
