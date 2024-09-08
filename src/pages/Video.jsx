@@ -14,7 +14,7 @@ export default function Video() {
     isLoading,
   } = useGetVideoQuery(videoId ? videoId : "");
 
-  console.log("The video is", video);
+
 
   // video er modhe onk property ase ogula distructure kore ber kore ante hbe
 
