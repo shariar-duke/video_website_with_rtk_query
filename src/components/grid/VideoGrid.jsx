@@ -3,9 +3,7 @@ import { useGetVideosQuery } from "../../features/api/apiSlice";
 import Loading from "../ui/Loading";
 import VideoGridItem from "./VideoGridItem";
 export default function VideoGrid() {
-  const { data: videos, isLoading, isError , refetch } = useGetVideosQuery(undefined, {
-    refetchOnMountOrArgChange:true
-  });
+  const { data: videos, isLoading, isError , refetch } = useGetVideosQuery();
 
   useEffect(()=> 
   {
