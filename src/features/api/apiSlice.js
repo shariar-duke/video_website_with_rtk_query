@@ -5,16 +5,16 @@ export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:9000",
   }),
-  tagTypes:["Videos","Video" , "RelatedVideos"],
+  tagTypes: ["Videos", "Video", "RelatedVideos"],
   endpoints: (builder) => ({
     getVideos: builder.query({
       query: () => "/videos",
       keepUnusedDataFor: 5,
-      providesTags:["Videos"]
+      providesTags: ["Videos"],
     }),
     getVideo: builder.query({
       query: (videoId) => `/videos/${videoId}`,
-      providesTags: (result , error , arg)=> [{type:"Video", id:arg}]
+      providesTags: (result, error, arg) => [{ type: "Video", id: arg }],
     }),
     getRelatedVideos: builder.query({
       query: ({ id, title }) => {
@@ -28,27 +28,47 @@ export const apiSlice = createApi({
         return queryString;
       },
 
-      providesTags: (result , error , arg)=> [{type:"RelatedVideos", id:arg.id}]
+      providesTags: (result, error, arg) => [
+        { type: "RelatedVideos", id: arg.id },
+      ],
     }),
-    addVideo:builder.mutation({
-        query:(data)=> ({
-            url: "/videos",
+    addVideo: builder.mutation({
+      query: (data) => ({
+        url: "/videos",
         method: "POST",
         body: data,
-        }),
-        invalidatesTags:["Videos"]
+      }),
+      invalidatesTags: ["Videos"],
     }),
-    editVideo:builder.mutation({
-        query:({id, data})=> ({
-            url: `/videos/${id}`,
+    editVideo: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/videos/${id}`,
         method: "PATCH",
         body: data,
-        }),
-        invalidatesTags: (result , error , arg)=> ["Videos", {type:"Video", id:arg.id}, {type:"RelatedVideos", id:arg.id}]
-    })
+      }),
+      invalidatesTags: (result, error, arg) => [
+        "Videos",
+        { type: "Video", id: arg.id },
+        { type: "RelatedVideos", id: arg.id },
+      ],
+    }),
+    deleteVideo: builder.mutation({
+      query: (id) => ({
+        url: `/videos/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Videos"],
+    }),
   }),
 });
 
 // Export the hooks for the queries and mutation
 // Export the hooks for the queries and mutation
-export const { useGetVideosQuery, useGetVideoQuery, useGetRelatedVideosQuery, useAddVideoMutation , useEditVideoMutation} = apiSlice;
+export const {
+  useGetVideosQuery,
+  useGetVideoQuery,
+  useGetRelatedVideosQuery,
+  useAddVideoMutation,
+  useEditVideoMutation,
+  useDeleteVideoMutation
+} = apiSlice;
