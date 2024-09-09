@@ -141,28 +141,6 @@
       "duration": "25",
       "views": "4500",
       "id": 8
-    },
-    {
-      "title": "Is it changing",
-      "author": "Sumit Data",
-      "description": "Best Redux Learning video",
-      "link": "https://www.youtube-nocookie.com/embed/34tjWL9wi4g",
-      "thumbnail": "https://i3.ytimg.com/vi/4tV1Mfi4fMA/maxresdefault.jpg",
-      "date": "2024-09-28",
-      "duration": "10",
-      "views": "1200",
-      "id": 9
-    },
-    {
-      "title": "test",
-      "author": "test",
-      "description": "test",
-      "link": "tst",
-      "thumbnail": "tst",
-      "date": "2024-09-26",
-      "duration": "10",
-      "views": "145",
-      "id": 10
     }
   ],
   "tags": [
